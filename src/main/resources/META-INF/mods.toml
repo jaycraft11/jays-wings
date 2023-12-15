@@ -5,7 +5,7 @@ license = "MIT"
 modId = "wings"
 version = "${file.jarVersion}"
 displayName = "Wings"
-authors = "pau101"
+authors = "Joy"
 description = "The Wings mod introduces an assortment of avian and insectoid wings for all of your aerial travel needs."
 logoFile = "logo.png"
 [[dependencies.wings]]
