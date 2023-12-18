@@ -4,12 +4,12 @@ buildscript {
 		maven { url 'https://files.minecraftforge.net/maven' }
 	}
 	dependencies {
-		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '8.4.+', changing: true
 	}
 }
 
 apply plugin: 'net.minecraftforge.gradle'
-version = '2.1.0'
+version = '8.4'
 group = 'me.joy.wings'
 archivesBaseName = 'wings'
 
@@ -50,15 +50,15 @@ minecraft {
 }
 
 jar {
-	classifier '1.16.5'
+	classifier '1.20.1'
 	manifest {
 		attributes([
-			"Specification-Title": "wings",
-			"Specification-Vendor": "pau101",
+			"Specification-Title": "wings 2",
+			"Specification-Vendor": "joy",
 			"Specification-Version": "1",
-			"Implementation-Title": "Wings",
+			"Implementation-Title": "Wings 2",
 			"Implementation-Version": "${version}",
-			"Implementation-Vendor" : "pau101",
+			"Implementation-Vendor" : "joy",
 			"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
 		])
 	}
