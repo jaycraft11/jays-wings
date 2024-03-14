@@ -2,7 +2,7 @@ modLoader = "javafml"
 loaderVersion = "[47,)"
 license = "MIT"
 [[mods]]
-modId = "wings"
+modId = "Wings_2"
 version = "${file.jarVersion}"
 displayName = "Wings"
 authors = "Joy"
