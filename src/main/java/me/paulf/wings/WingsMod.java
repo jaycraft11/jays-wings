@@ -1,68 +1,71 @@
-package me.paulf.wings;
+package net.coulterb.wings2;
 
-import com.mojang.serialization.Lifecycle;
-import me.paulf.wings.client.ClientProxy;
-import me.paulf.wings.server.ServerProxy;
-import me.paulf.wings.server.apparatus.FlightApparatus;
-import me.paulf.wings.server.apparatus.SimpleFlightApparatus;
-import me.paulf.wings.server.config.WingsItemsConfig;
-import me.paulf.wings.server.effect.WingsEffects;
-import me.paulf.wings.server.flight.Flight;
-import me.paulf.wings.server.item.WingsItems;
-import me.paulf.wings.server.sound.WingsSounds;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.DefaultedRegistry;
-import net.minecraft.util.registry.Registry;
+import com.mojang.logging.LogUtils;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.slf4j.Logger;
 
-@Mod(WingsMod.ID)
-public final class WingsMod {
-    public static final String ID = "wings";
+// The value here should match an entry in the META-INF/mods.toml file
+@Mod(WINGS2.MOD_ID)
+public class WINGS2
+{
+    // Define mod id in a common place for everything to reference
+    public static final String MOD_ID = "Wings_2";
+    // Directly reference a slf4j logger
+    private static final Logger LOGGER = LogUtils.getLogger();
+    // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
 
-    private static WingsMod INSTANCE;
+    public WINGS2()
+    {
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-    public static final Registry<FlightApparatus> WINGS = new DefaultedRegistry<>(Names.NONE.toString(), RegistryKey.createRegistryKey(new ResourceLocation(ID, "wings")), Lifecycle.experimental());
+        // Register the commonSetup method for modloading
+        modEventBus.addListener(this::commonSetup);
 
-    public static final FlightApparatus NONE_WINGS = Registry.register(WINGS, Names.NONE, FlightApparatus.NONE);
-    public static final FlightApparatus ANGEL_WINGS = Registry.register(WINGS, Names.ANGEL, new SimpleFlightApparatus(WingsItemsConfig.ANGEL));
-	public static final FlightApparatus PARROT_WINGS = Registry.register(WINGS, Names.PARROT, new SimpleFlightApparatus(WingsItemsConfig.PARROT));
-    public static final FlightApparatus BAT_WINGS = Registry.register(WINGS, Names.BAT, new SimpleFlightApparatus(WingsItemsConfig.BAT));
-    public static final FlightApparatus BLUE_BUTTERFLY_WINGS = Registry.register(WINGS, Names.BLUE_BUTTERFLY, new SimpleFlightApparatus(WingsItemsConfig.BLUE_BUTTERFLY));
-    public static final FlightApparatus DRAGON_WINGS = Registry.register(WINGS, Names.DRAGON, new SimpleFlightApparatus(WingsItemsConfig.DRAGON));
-    public static final FlightApparatus EVIL_WINGS = Registry.register(WINGS, Names.EVIL, new SimpleFlightApparatus(WingsItemsConfig.EVIL));
-    public static final FlightApparatus FAIRY_WINGS = Registry.register(WINGS, Names.FAIRY, new SimpleFlightApparatus(WingsItemsConfig.FAIRY));
-    public static final FlightApparatus MONARCH_BUTTERFLY_WINGS = Registry.register(WINGS, Names.MONARCH_BUTTERFLY, new SimpleFlightApparatus(WingsItemsConfig.MONARCH_BUTTERFLY));
-    public static final FlightApparatus SLIME_WINGS = Registry.register(WINGS, Names.SLIME, new SimpleFlightApparatus(WingsItemsConfig.SLIME));
-    public static final FlightApparatus FIRE_WINGS = Registry.register(WINGS, Names.FIRE, new SimpleFlightApparatus(WingsItemsConfig.FIRE));
+        // Register ourselves for server and other game events we are interested in
+        MinecraftForge.EVENT_BUS.register(this);
 
-    private Proxy proxy;
-
-    public WingsMod() {
-        if (INSTANCE != null) throw new IllegalStateException("Already constructed!");
-        INSTANCE = this;
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        WingsItems.REG.register(bus);
-        WingsSounds.REG.register(bus);
-        WingsEffects.REG.register(bus);
-        this.proxy = DistExecutor.safeRunForDist(() -> ProxyInit::createClient, () -> ProxyInit::createServer);
-        this.proxy.init(bus);
+        // Register the item to a creative tab
+        modEventBus.addListener(this::addCreative);
     }
 
-    static class ProxyInit {
-        static Proxy createClient() {
-            return new ClientProxy();
-        }
+    private void commonSetup(final FMLCommonSetupEvent event)
+    {
 
-        static Proxy createServer() {
-            return new ServerProxy();
-        }
     }
 
+    // Add the example block item to the building blocks tab
+    private void addCreative(BuildCreativeModeTabContentsEvent event)
+    {
+
+    }
+
+    // You can use SubscribeEvent and let the Event Bus discover methods to call
+    @SubscribeEvent
+    public void onServerStarting(ServerStartingEvent event)
+    {
+
+    }
+
+    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
+    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    public static class ClientModEvents
+    {
+        @SubscribeEvent
+        public static void onClientSetup(FMLClientSetupEvent event)
+        {
+
+        }
+    }
+}
     public void addFlightListeners(PlayerEntity player, Flight instance) {
         this.requireProxy().addFlightListeners(player, instance);
     }
